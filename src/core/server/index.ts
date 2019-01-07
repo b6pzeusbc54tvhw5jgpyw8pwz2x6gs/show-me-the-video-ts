@@ -141,7 +141,7 @@ export const getGuideInfo = async (id: string, url: string) => {
   url = url || SMTV_CLONE_REPO_URL
   const guideInfoArr = await getVideoInfoArr(url)
   const info = find(guideInfoArr, { id })
-  logger.debug(info)
+
   return info
 }
 

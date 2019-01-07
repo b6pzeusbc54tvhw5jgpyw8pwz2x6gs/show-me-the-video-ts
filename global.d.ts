@@ -1,9 +1,19 @@
+import { string } from 'prop-types';
+
 declare module 'mktemp'
 
 declare module 'video-react'
 
 interface IStatelessPage<P = {}> extends React.FunctionComponent<P> {
   getInitialProps?: (ctx: any) => any
+}
+
+interface IGuideInfo {
+  id: string
+  videoUrl: string
+  text: string
+  thumbnailUrl: string
+  filename: string
 }
 
 declare module 'react-markdown' {

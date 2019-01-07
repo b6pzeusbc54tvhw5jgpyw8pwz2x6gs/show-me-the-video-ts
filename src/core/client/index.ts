@@ -12,7 +12,7 @@ export const getVideoInfoArr = async () => {
 export const getGuideInfo = async (id: string) => {
   const videoInfoArr = await getVideoInfoArr()
   const videoInfo = find(videoInfoArr, { id })
-  if( videoInfo) return videoInfo
+  if (videoInfo) return videoInfo
 
   const [err,res] = await to( axios.get('/api/v1/guide/' + id))
   if (err) throw err
