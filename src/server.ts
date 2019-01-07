@@ -4,7 +4,7 @@ import * as express from 'express'
 import * as next from 'next'
 import { console } from 'tracer'
 
-import { getVideoInfoArr, getGuideInfo } from './core/server'
+import { /*getVideoInfoArr,*/ getGuideInfo } from './core/server'
 
 const logger = console()
 
