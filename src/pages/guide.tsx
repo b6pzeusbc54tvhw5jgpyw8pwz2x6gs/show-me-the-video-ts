@@ -2,11 +2,21 @@ import * as React from 'react'
 import { withRouter, SingletonRouter } from 'next/router'
 import getConfig from 'next/config'
 import { Card as BPCard } from '@blueprintjs/core'
-import styled, { createGlobalStyle } from 'styled-components'
+import styled from 'styled-components'
+import * as ReactMarkdown from 'react-markdown'
+import { Player, BigPlayButton, ControlBar, PlaybackRateMenuButton } from 'video-react'
 import { space, width, fontSize, color } from 'styled-system'
+import "video-react/dist/video-react.css"
+import { Button } from "@blueprintjs/core"
+import * as mime from 'mime-types'
+import { Classes } from "@blueprintjs/core"
+import "@blueprintjs/core/lib/less/variables.less"
 
+import { CONST_DIR_NAME } from '../core/constant'
+import markdownCss from '../markdownCss'
 import { getGuideInfo } from '../core'
-import { IGuideInfo, IStatelessPage } from 'global';
+import Header from '../component/Header'
+import { IGuideInfo, IStatelessPage, ICommonStyledProps } from 'global';
 const { publicRuntimeConfig } = getConfig()
 
 const { SMTV_URL, SMTV_PUBLIC_REPO_URL, SMTV_MANAGER_ID } = publicRuntimeConfig
@@ -26,35 +36,69 @@ const Page = styled.div`
   flex-direction: column;
 `
 
-const Card = styled(BPCard)`
+const Card = styled(BPCard)<ICommonStyledProps>`
   background-color: blue;
   color: white;
+  d: ${p => p.showLayout ? 'd' : 'f'};
 `
 
-const GlobalStyle = createGlobalStyle`
-  * {
-    box-sizing: border-box;
-  }
-  a {
-    text-decoration: none;
-  }
-  a:visited {
-    text-decoration: none;
-  }
-  html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
-    vertical-align: baseline;
-    margin: 0px;
-    padding: 0px;
-    border-width: 0px;
-    border-style: initial;
-    border-color: initial;
-    border-image: initial;
-    font: inherit;
+const Content = styled(BPCard)<ICommonStyledProps>`
+  margin-bottom: 60px;
+  flex: 1 1 0%;
+  box-sizing: border-box;
+`
+const Container = styled(BPCard)<ICommonStyledProps>`
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 960px;
+  padding: 0px 20px;
+`
+
+const VideoContainer = styled(BPCard)<ICommonStyledProps>`
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0px;
+`
+
+const VideoFrame = styled(BPCard)<ICommonStyledProps>`
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+
+  & div:focus {
+    outline: none;
   }
 `
+
+const MarkdownStyle = styled(BPCard)`
+  ${markdownCss}
+`
+
+const lookupMime = (src: string) => mime.lookup(src) ? mime.lookup(src) : void 0
+
+const customRenderers: ReactMarkdown.Renderers = {
+  linkReference: (props) => {
+    const videoUrl = props!.href
+    const thumbnailUrl = props.children[0]!.props!.src
+    // videoUrl, thumbnailUrl 이 아래의 패턴의 경우
+    // 비디오 플레이어 자리. 플레이어는 따로 띄우고 있으므로 제거해줌
+    if (
+      (lookupMime(videoUrl) || '').split('/')[0] === 'video'
+      && (lookupMime(thumbnailUrl) || '').split('/')[0] === 'image'
+    ) {
+      return <div/>
+    }
+    return <a {...props}/>
+  },
+}
 
 const Guide: IStatelessPage<GuideProps> = (props) => {
   const { router } = props
+  if (!props.guideInfo) {
+    return <pre>{JSON.stringify(props,null,2)}</pre>
+  }
   const { id, videoUrl, text, thumbnailUrl, filename } = props.guideInfo
 
   const issueTitle = encodeURIComponent(`
@@ -75,9 +119,38 @@ const Guide: IStatelessPage<GuideProps> = (props) => {
   `.trim())
   return (
     <Page>
-      <GlobalStyle />
-      {id}
-      <Card>card</Card>
+      <Header />
+      <Content>
+        <Container>
+          <VideoContainer>
+            <VideoFrame>
+              <Player
+                src={videoUrl}
+                poster={thumbnailUrl}
+                playsInline
+              >
+                <BigPlayButton position="center" />
+                <ControlBar>
+                  <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} />
+                </ControlBar>
+              </Player>
+            </VideoFrame>
+          </VideoContainer>
+          <MarkdownStyle>
+            <ReactMarkdown source={text} renderers={customRenderers}/>
+          </MarkdownStyle>
+          <BPCard>
+            <Button className={Classes.BUTTON} large={true}>
+              <a target='_blank' href={`${SMTV_PUBLIC_REPO_URL}/issues/new?issue[title]=${issueTitle}&issue[description]=${issueDescription}`}>질문/제안</a>
+            </Button>
+            <Button className={Classes.BUTTON} large={true}>
+              <a target='_blank' href={`${SMTV_PUBLIC_REPO_URL}/edit/master/${CONST_DIR_NAME}/${filename}`}>
+                편집
+              </a>
+            </Button>
+            </BPCard>
+        </Container>
+      </Content>
     </Page>
   )
 }

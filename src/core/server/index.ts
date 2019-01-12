@@ -94,7 +94,7 @@ interface IFilenameText {
 }
 
 const parseVideoInfo = ({ filename, text }: IFilenameText ) => {
-  logger.debug( filename )
+  // logger.debug( filename )
   // todotodotodotodo!!!
   const tokenArr = marked.lexer(text)
   const firstHeading: any = find(tokenArr, t => t.type === 'heading' && t.depth === 1) || {}

@@ -1,11 +1,19 @@
 import { string } from 'prop-types';
 
-declare module 'mktemp'
+declare module "mktemp"
 
-declare module 'video-react'
+declare module "video-react"
 
 interface IStatelessPage<P = {}> extends React.FunctionComponent<P> {
   getInitialProps?: (ctx: any) => any
+}
+
+interface IStatefulPage<P = {}> extends React.Component<P> {
+  getInitialProps?: (ctx: any) => any
+}
+
+interface ICommonStyledProps {
+  showLayout?: boolean
 }
 
 interface IGuideInfo {

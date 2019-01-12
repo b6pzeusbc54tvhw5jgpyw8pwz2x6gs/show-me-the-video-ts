@@ -1,12 +1,22 @@
 const webpack = require('webpack')
 const withTypescript = require('@zeit/next-typescript')
+const withLess = require('@zeit/next-less')
+const withCss = require('@zeit/next-css')
 
 let customConfig = {
+  cssModules: true,
   webpack: (config, { isServer }) => {
     if (isServer) return config
 
     const { IgnorePlugin } = webpack
     config.plugins.push(new IgnorePlugin(/\.\/server$/))
+    config.watchOptions = {
+      ignored: [
+        /\.git\//,
+        /src\/\.next\//,
+        /node_modules/
+      ]
+    }
     return config
   },
   serverRuntimeConfig: {
@@ -21,4 +31,6 @@ let customConfig = {
 }
 
 customConfig = withTypescript(customConfig)
+customConfig = withLess(customConfig)
+customConfig = withCss(customConfig)
 module.exports = customConfig
