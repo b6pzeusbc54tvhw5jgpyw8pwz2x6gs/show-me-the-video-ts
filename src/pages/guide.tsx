@@ -7,10 +7,14 @@ import * as ReactMarkdown from 'react-markdown'
 import { Player, BigPlayButton, ControlBar, PlaybackRateMenuButton } from 'video-react'
 import { space, width, fontSize, color } from 'styled-system'
 import "video-react/dist/video-react.css"
-import { Button } from "@blueprintjs/core"
+import { Button as BPButton, Intent, Slider, KeyCombo } from "@blueprintjs/core";
 import * as mime from 'mime-types'
-import { Classes } from "@blueprintjs/core"
-import "@blueprintjs/core/lib/less/variables.less"
+import Ripples from 'react-ripples'
+
+
+// import { Classes } from "@blueprintjs/core"
+import "@blueprintjs/core/lib/css/blueprint.css";
+// import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 
 import { CONST_DIR_NAME } from '../core/constant'
 import markdownCss from '../markdownCss'
@@ -70,6 +74,10 @@ const VideoFrame = styled(BPCard)<ICommonStyledProps>`
   & div:focus {
     outline: none;
   }
+`
+
+const Button = styled(BPButton)<ICommonStyledProps>`
+  width: 100%;
 `
 
 const MarkdownStyle = styled(BPCard)`
@@ -140,10 +148,11 @@ const Guide: IStatelessPage<GuideProps> = (props) => {
             <ReactMarkdown source={text} renderers={customRenderers}/>
           </MarkdownStyle>
           <BPCard>
-            <Button className={Classes.BUTTON} large={true}>
-              <a target='_blank' href={`${SMTV_PUBLIC_REPO_URL}/issues/new?issue[title]=${issueTitle}&issue[description]=${issueDescription}`}>질문/제안</a>
-            </Button>
-            <Button className={Classes.BUTTON} large={true}>
+            <Ripples>
+              <Button intent={Intent.WARNING} large={true} text={'ddd'}>
+              </Button>
+            </Ripples>
+            <Button large={true}>
               <a target='_blank' href={`${SMTV_PUBLIC_REPO_URL}/edit/master/${CONST_DIR_NAME}/${filename}`}>
                 편집
               </a>

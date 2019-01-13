@@ -1,10 +1,8 @@
 const webpack = require('webpack')
 const withTypescript = require('@zeit/next-typescript')
-const withLess = require('@zeit/next-less')
 const withCss = require('@zeit/next-css')
 
 let customConfig = {
-  cssModules: true,
   webpack: (config, { isServer }) => {
     if (isServer) return config
 
@@ -31,6 +29,5 @@ let customConfig = {
 }
 
 customConfig = withTypescript(customConfig)
-customConfig = withLess(customConfig)
 customConfig = withCss(customConfig)
 module.exports = customConfig

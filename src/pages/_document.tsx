@@ -18,7 +18,7 @@ export default class MyDocument extends Document<IDocumentProps> {
 
   render() {
     return (
-      <html>
+      <html className="bp3-focus-disabled">
         <Head>
           {this.props.styleTags}
         </Head>

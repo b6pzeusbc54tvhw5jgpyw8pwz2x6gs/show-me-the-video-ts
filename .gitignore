@@ -9,3 +9,5 @@ dist
 
 /.envrc
 /git-repositories
+
+/yarn-*.log
