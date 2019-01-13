@@ -1,9 +1,19 @@
 import * as React from 'react'
-import Link from 'next/link'
 
-export default () => (
-  <ul>
-    <li><Link href='/a' as='/a'><a>a</a></Link></li>
-    <li><Link href='/b' as='/b'><a>b</a></Link></li>
-  </ul>
-)
+import CardBox from '../component/CardBox'
+import Footer from '../component/Footer'
+import Header from '../component/Header'
+import { Page } from '../component/styled'
+
+
+const Index = () => {
+  return (
+    <Page>
+      <Header />
+      <CardBox />
+      <Footer />
+    </Page>
+  )
+}
+
+export default Index

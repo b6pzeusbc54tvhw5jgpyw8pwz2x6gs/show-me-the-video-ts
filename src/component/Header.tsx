@@ -1,4 +1,4 @@
-import { withRouter } from 'next/router'
+import { withRouter, WithRouterProps } from 'next/router'
 import * as React from 'react'
 import getConfig from 'next/config'
 import styled from 'styled-components'
@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { ICommonStyledProps } from 'global'
 import { AppContext } from '../context'
 import { useContext } from 'react';
+import { NextFunctionComponent, NextContext, NextStatelessComponent } from 'next';
 const {publicRuntimeConfig} = getConfig()
 
 const Box = styled.div<ICommonStyledProps>`
@@ -57,7 +58,7 @@ const TextButtonBox = styled.ul`
   list-style: none;
 `
 
-const Header = props => {
+const Header: NextStatelessComponent<WithRouterProps> = props => {
   const { showLayout, toggleShowLayout } = useContext(AppContext)
   const { pathname } = props.router
   const { SMTV_TITLE } = publicRuntimeConfig

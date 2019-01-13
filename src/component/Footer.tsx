@@ -1,10 +1,12 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
+import * as React from 'react'
 import styled from 'styled-components'
-import { Box as RebassBox, Image as RebassImage, Link as RebassLink, Flex as RebassFlex } from 'rebass'
+import { AppContext } from '../context'
+import { ICommonStyledProps } from 'global'
+import { NextStatelessComponent } from 'next';
+import { WithRouterProps } from 'next/router';
 
-import { appContext } from '../context'
-
-const Box = styled(RebassBox)`
+const Box = styled.div<ICommonStyledProps>`
   background-color: ${p => p.showLayout ? 'rgba(133, 233, 133, 0.65)' : 'init'};
   padding: 1em 10px;
   bottom: 0px;
@@ -21,8 +23,8 @@ const Box = styled(RebassBox)`
   }
 `
 
-const Footer = props => {
-  const { showLayout, toggleShowLayout } = useContext(appContext)
+const Footer:NextStatelessComponent<WithRouterProps> = () => {
+  const { showLayout } = useContext(AppContext)
 
   return (
     <Box showLayout={showLayout}>

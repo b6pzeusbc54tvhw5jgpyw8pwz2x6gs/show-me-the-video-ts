@@ -1,19 +1,19 @@
-import React, { useContext } from 'react'
-import PropTypes from 'prop-types'
+import * as React from 'react'
+import { useContext } from 'react'
 import styled from 'styled-components'
-import { Box as RebassBox, Image as RebassImage, Link as RebassLink } from 'rebass'
 import Link from 'next/link'
-import moment from 'moment'
+import * as moment from 'moment'
 
-import { appContext } from '../context'
+import { AppContext } from '../context'
+import { ICommonStyledProps } from 'global';
 
-const Box = styled(RebassBox)`
+const Box = styled.div<ICommonStyledProps>`
   background-color: ${p => p.showLayout ? 'rgba(133, 233, 133, 0.65)' : 'initial'};
   cursor: pointer;
   position: relative;
 `
 
-const LinkInner = styled(RebassLink)`
+const LinkInner = styled.div<ICommonStyledProps>`
   box-shadow: none;
   border-bottom: none;
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
@@ -25,7 +25,7 @@ const LinkInner = styled(RebassLink)`
   }
 `
 
-const ImageRapper = styled(RebassBox)`
+const ImageRapper = styled.div<ICommonStyledProps>`
   position: relative;
   overflow: hidden;
   box-shadow: rgba(102, 51, 153, 0.1) 0px 4px 10px;
@@ -38,12 +38,12 @@ const ImageRapper = styled(RebassBox)`
   }
 `
 
-const Padding = styled.div`
+const Padding = styled.div<ICommonStyledProps>`
   width: 100%;
   padding-bottom: 65%;
 `
 
-const Image = styled(RebassImage)`
+const Image = styled.img<ICommonStyledProps>`
   border-radius: 4px;
   position: absolute;
   top: 0px;
@@ -69,7 +69,7 @@ const Image = styled(RebassImage)`
 }
 `
 
-const AbsoluteBox = styled(RebassBox)`
+const AbsoluteBox = styled.div<ICommonStyledProps>`
   position: absolute;
   text-align: right;
   bottom: 5px;
@@ -80,7 +80,7 @@ const AbsoluteBox = styled(RebassBox)`
   font-family: Roboto;
 `
 
-const InfoBox = styled(RebassBox)`
+const InfoBox = styled.div<ICommonStyledProps>`
   color: rgba(0, 0, 0, 0.36);
   font-size: 0.8409rem;
   line-height: 1.4rem;
@@ -90,7 +90,7 @@ const InfoBox = styled(RebassBox)`
   }
 `
 
-const Title = styled(RebassBox)`
+const Title = styled.div<ICommonStyledProps>`
   background-color: ${p => p.showLayout ? 'rgba(233, 83, 133, 0.45)' : 'initial'};
   color: rgba(0, 0, 0, 0.36);
 
@@ -112,23 +112,23 @@ const Title = styled(RebassBox)`
   }
 `
 
-const SubInfo = styled(RebassBox)`
+const SubInfo = styled.div<ICommonStyledProps>`
   text-align: left;
 `
 
 const Card = props => {
-  const { showLayout } = useContext(appContext)
+  const { showLayout } = useContext(AppContext)
   const { title, thumbnailUrl, id, date, author } = props
   const dateStr = moment(date).format('MMMM D, YYYY')
   const duration = props.duration || "00:00"
-
+// Box px={2} py={2} my={1} width={[1, 1/2, 1/3, 1/4]}
   return (
-    <Box px={2} py={2} my={1} width={[1, 1/2, 1/3, 1/4]} showLayout={showLayout}>
+    <Box showLayout={showLayout}>
       <Link href={{ pathname: `/guide/${id}` }}>
         <LinkInner showLayout={showLayout}>
           <ImageRapper>
             <Padding/>
-            <Image width={[ 1 ]} src={thumbnailUrl}/>
+            <Image src={thumbnailUrl}/>
             <AbsoluteBox>
               <span>{duration}</span>
             </AbsoluteBox>
@@ -145,17 +145,6 @@ const Card = props => {
       </InfoBox>
     </Box>
   )
-}
-
-Card.propTypes = {
-  // videoUrl: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string,
-  thumbnailUrl: PropTypes.string.isRequired,
-  duration: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
 }
 
 export default Card

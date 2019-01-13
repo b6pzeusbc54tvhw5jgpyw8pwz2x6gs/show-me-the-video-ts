@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { Flex as RebassFlex } from 'rebass'
 import NextLink from 'next/link'
 import omit from 'lodash/omit'
 
@@ -10,7 +9,7 @@ const StyledLink = styled.div`
   }
 `
 
-export const Page = styled(RebassFlex)`
+export const Page = styled.div`
   display: flex;
   min-height: 100vh;
   flex-direction: column;
