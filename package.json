@@ -27,6 +27,7 @@
     "styled-system": "^3.2.0",
     "tracer": "^0.9.8",
     "ts-optchain": "^0.1.2",
+    "typescript-optional": "^2.0.1",
     "video-react": "^0.13.1"
   },
   "devDependencies": {

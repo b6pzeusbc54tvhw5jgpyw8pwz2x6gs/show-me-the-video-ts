@@ -12,6 +12,7 @@ import * as readdirEnhanced from 'readdir-enhanced'
 import * as tracer from 'tracer'
 import { CONST_DIR_NAME, CONST_GITREPO_PATH } from '../constant'
 import { oc } from 'ts-optchain'
+import { Optional as Op } from "typescript-optional"
 
 function c<T>(exp: () => T) {
   try {
@@ -47,7 +48,7 @@ const getRepo = async (repoUrl: string, dirPath?: string) => {
   const [err2, dotGitStat] = await to(fs.stat(dotGitPath))
   if (err2 && err2.code !== 'ENOENT') throw err
 
-  if (oc(stat)!.isDirectory() && oc(dotGitStat).isDirectory()) {
+  if (oc(stat).isDirectory() && oc(dotGitStat).isDirectory()) {
     // true, true
     const [err3] = await to(git(dirPath).pull())
     if (err3) throw err3
@@ -97,11 +98,14 @@ const parseVideoInfo = ({ filename, text }: IFilenameText ) => {
   // logger.debug( filename )
   // todotodotodotodo!!!
   const tokenArr = marked.lexer(text)
+  console.log(tokenArr)
   const firstHeading: any = find(tokenArr, t => t.type === 'heading' && t.depth === 1) || {}
   const titleIndex = findIndex( tokenArr, firstHeading )
-  let subTitle: any = tokenArr[titleIndex+1]
-  subTitle = subTitle!.type === 'heading' && subTitle.depth === 2
-    ? subTitle.text : ''
+
+  const subTitleToken = Op.ofNullable(tokenArr[titleIndex+1]).get()
+
+  let a: marked.Tokens.Heading
+  const subTitle = subTitleToken.isPresent() ? subTitleToken.get() : a;
 
   const isDraft = c(() => tokenArr.links.draft.href) === 'true'
   if (isDraft) return null
