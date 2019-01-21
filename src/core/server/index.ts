@@ -4,34 +4,24 @@ import * as git from 'simple-git/promise'
 import to from 'await-to-js'
 import { promises } from 'fs'
 
-import { compact, filter, reject as lodashReject, find, findIndex, last } from 'lodash'
+import { compact, filter, reject as lodashReject, find, findIndex, last, get } from 'lodash'
 
 import * as marked from 'marked'
+import { Token, Tokens } from 'marked'
 import * as md5 from 'md5'
 import * as readdirEnhanced from 'readdir-enhanced'
 import * as tracer from 'tracer'
 import { CONST_DIR_NAME, CONST_GITREPO_PATH } from '../constant'
 import { oc } from 'ts-optchain'
-import { Optional as Op } from "typescript-optional"
-
-function c<T>(exp: () => T) {
-  try {
-      const val = exp()
-      if (val != null) {
-          return val
-      }
-  } catch (err) {
-    // logger.debug(err)
-  }
-
-  return void 0
-}
 
 const fs = promises
 const logger = tracer.console()
 const { SMTV_CLONE_REPO_URL='' } = process.env
 
 const getPathFromGitRepoUrl = (url: string) => {
+  if (!url) {
+    return ""
+  }
   const projectName = last(url.split('/'))!.replace(/\.git$/,'')
   return `${CONST_GITREPO_PATH}/${projectName}.${md5(url)}`
 }
@@ -94,33 +84,37 @@ interface IFilenameText {
   text: string
 }
 
+const emptyLink = { href: "", title: "" }
+// const emptyHeading: Tokens.Heading = { type: 'heading', depth: -1, text: "" }
+
 const parseVideoInfo = ({ filename, text }: IFilenameText ) => {
   // logger.debug( filename )
   // todotodotodotodo!!!
   const tokenArr = marked.lexer(text)
-  console.log(tokenArr)
-  const firstHeading: any = find(tokenArr, t => t.type === 'heading' && t.depth === 1) || {}
+  const firstHeading = find(tokenArr, (t: Token): t is Tokens.Heading => t.type === 'heading' && t.depth === 1)
+  // const title = firstHeading ? firstHeading.text : "[Untitle]"
+  const title = firstHeading ? firstHeading.text : "[Untitle]"
+
   const titleIndex = findIndex( tokenArr, firstHeading )
 
-  const subTitleToken = Op.ofNullable(tokenArr[titleIndex+1]).get()
+  const subTitleToken = get<Token | void>(tokenArr, titleIndex+1)
+  const subTitle = subTitleToken && subTitleToken.type == 'heading' && subTitleToken.depth == 2
+      ? subTitleToken.text : '';
 
-  let a: marked.Tokens.Heading
-  const subTitle = subTitleToken.isPresent() ? subTitleToken.get() : a;
-
-  const isDraft = c(() => tokenArr.links.draft.href) === 'true'
+  const isDraft = (tokenArr.links.draft || { href: "false" }).href === 'true'
   if (isDraft) return null
 
   return {
-    title: firstHeading!.text || '[제목없음]',
-    subTitle: subTitle,
-    videoUrl: c(() => tokenArr.links.videourl!.href),
-    thumbnailUrl: c(() => tokenArr.links.thumbnailurl!.href),
-    tagArr: c(() => tokenArr.links.tags.href.split(',')) || [],
-    prevGuideId: c(() => tokenArr.links.prev.href),
-    nextGuideId: c(() => tokenArr.links.next.href),
-    author: c(() => tokenArr.links.author.href),
-    date: c(() => tokenArr.links.date.href),
-    duration: c(() => tokenArr.links.duration.href),
+    title,
+    subTitle,
+    videoUrl: (tokenArr.links.videourl || emptyLink).href,
+    thumbnailUrl: (tokenArr.links.thumbnailurl || emptyLink).href,
+    tagArr: (tokenArr.links.tags || emptyLink).href.split(','),
+    prevGuideId: (tokenArr.links.prev || emptyLink).href,
+    nextGuideId: (tokenArr.links.next || emptyLink).href,
+    author: (tokenArr.links.author || emptyLink).href,
+    date: (tokenArr.links.date || emptyLink).href,
+    duration: (tokenArr.links.duration || emptyLink).href,
     id: md5(filename).substr(0,8),
     filename: filename,
     text: text,
