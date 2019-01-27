@@ -31,12 +31,12 @@ const ImageWrapper = styled.div`
   ${p => lo(p.theme.showLayout, "ImageWrapper", "rgba(205, 40, 0, 0.65)" )}
 `
 
-const LinkInner = styled.div<ICommonStyledProps>`
+const LinkInner = styled.a`
   box-shadow: none;
   border-bottom: none;
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
   text-decoration: none;
-  background-color: ${p => p.showLayout ? 'rgba(255, 0, 0, 0.81)' : 'transparent'};
+  ${p => lo(p.theme.showLayout, "LinkInner", "rgba(255, 200, 180, 0.51)" )}
 `
 
 const Image = styled.img<ICommonStyledProps>`
@@ -123,16 +123,16 @@ const CardComponent: React.FunctionComponent<IGuideInfo> = props => {
               <span>{duration}</span>
             </AbsoluteBox>
           </ImageWrapper>
+          <InfoBox className='info'>
+            <Title>
+              <h5>{title}</h5>
+              <SubInfo>
+                <span>{`${dateStr} / ${author}`}</span>
+              </SubInfo>
+            </Title>
+          </InfoBox>
         </LinkInner>
       </Link>
-      <InfoBox className='info'>
-        <Title>
-          <h5>{title}</h5>
-          <SubInfo>
-            <span>{`${dateStr} / ${author}`}</span>
-          </SubInfo>
-        </Title>
-      </InfoBox>
     </Card>
   )
 }
