@@ -1,16 +1,34 @@
 import * as React from 'react'
-import { useContext } from 'react'
-import styled from 'styled-components'
 import Link from 'next/link'
 import * as moment from 'moment'
 
-import { AppContext } from '../context'
-import { ICommonStyledProps } from 'global';
+import styled from '../style/styled-component'
+import { ICommonStyledProps, IGuideInfo } from 'global';
+import { layout as lo } from '../style/polished'
 
-const Box = styled.div<ICommonStyledProps>`
-  background-color: ${p => p.showLayout ? 'rgba(133, 233, 133, 0.65)' : 'initial'};
+const Card = styled.div`
   cursor: pointer;
+  margin: .6em 0px;
+  width: ${p => p.theme.cardWidth}px;
+  ${p => lo(p.theme.showLayout, "Card", "rgba(133, 233, 133, 0.65)" )}
+  &:hover .info {
+    text-decoration: underline;
+  }
+  &:hover .image {
+    transform: translateY(-3px);
+    box-shadow: rgba(140, 101, 179, 0.5) 0px 8px 20px;
+  }
+`
+
+const ImageWrapper = styled.div`
+  height: 152px;
   position: relative;
+  overflow: hidden;
+  box-shadow: rgba(102, 51, 153, 0.1) 0px 4px 10px;
+  margin-bottom: 0.525rem;
+  border-radius: 4px;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
+  ${p => lo(p.theme.showLayout, "ImageWrapper", "rgba(205, 40, 0, 0.65)" )}
 `
 
 const LinkInner = styled.div<ICommonStyledProps>`
@@ -19,28 +37,6 @@ const LinkInner = styled.div<ICommonStyledProps>`
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
   text-decoration: none;
   background-color: ${p => p.showLayout ? 'rgba(255, 0, 0, 0.81)' : 'transparent'};
-  &:hover {
-    color: rgb(102, 51, 153);
-    outline-width: 0;
-  }
-`
-
-const ImageRapper = styled.div<ICommonStyledProps>`
-  position: relative;
-  overflow: hidden;
-  box-shadow: rgba(102, 51, 153, 0.1) 0px 4px 10px;
-  margin-bottom: 0.525rem;
-  border-radius: 4px;
-  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1) 0s;
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: rgba(140, 101, 179, 0.5) 0px 8px 20px;
-  }
-`
-
-const Padding = styled.div<ICommonStyledProps>`
-  width: 100%;
-  padding-bottom: 65%;
 `
 
 const Image = styled.img<ICommonStyledProps>`
@@ -69,7 +65,7 @@ const Image = styled.img<ICommonStyledProps>`
 }
 `
 
-const AbsoluteBox = styled.div<ICommonStyledProps>`
+const AbsoluteBox = styled.div`
   position: absolute;
   text-align: right;
   bottom: 5px;
@@ -80,21 +76,19 @@ const AbsoluteBox = styled.div<ICommonStyledProps>`
   font-family: Roboto;
 `
 
-const InfoBox = styled.div<ICommonStyledProps>`
+const InfoBox = styled.div`
   color: rgba(0, 0, 0, 0.36);
-  font-size: 0.8409rem;
-  line-height: 1.4rem;
+  line-height: 18px;
+  font-size: .9em;
   align-items: baseline;
-  &:hover {
-    text-decoration: underline;
-  }
+  ${p => lo(p.theme.showLayout, "", "rgba(33, 13, 133, 0.45)" )}
 `
 
-const Title = styled.div<ICommonStyledProps>`
-  background-color: ${p => p.showLayout ? 'rgba(233, 83, 133, 0.45)' : 'initial'};
+const Title = styled.div`
   color: rgba(0, 0, 0, 0.36);
+  ${p => lo(p.theme.showLayout, "Title", "rgba(233, 83, 133, 0.45)" )}
 
-  & .title {
+  & h5 {
     box-shadow: rgb(251, 250, 252) 0px 0px 0px 0px inset;
     transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0s, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) 0s;
     padding-bottom: 0;
@@ -116,35 +110,31 @@ const SubInfo = styled.div<ICommonStyledProps>`
   text-align: left;
 `
 
-const Card = props => {
-  const { showLayout } = useContext(AppContext)
-  const { title, thumbnailUrl, id, date, author } = props
+const CardComponent: React.FunctionComponent<IGuideInfo> = props => {
+  const { title, thumbnailUrl, id, date, author, duration } = props
   const dateStr = moment(date).format('MMMM D, YYYY')
-  const duration = props.duration || "00:00"
-// Box px={2} py={2} my={1} width={[1, 1/2, 1/3, 1/4]}
   return (
-    <Box showLayout={showLayout}>
+    <Card>
       <Link href={{ pathname: `/guide/${id}` }}>
-        <LinkInner showLayout={showLayout}>
-          <ImageRapper>
-            <Padding/>
+        <LinkInner>
+          <ImageWrapper className='image'>
             <Image src={thumbnailUrl}/>
             <AbsoluteBox>
               <span>{duration}</span>
             </AbsoluteBox>
-          </ImageRapper>
+          </ImageWrapper>
         </LinkInner>
       </Link>
-      <InfoBox>
-        <Title showLayout={showLayout}>
-          <h5 className='title'>{title}</h5>
+      <InfoBox className='info'>
+        <Title>
+          <h5>{title}</h5>
           <SubInfo>
             <span>{`${dateStr} / ${author}`}</span>
           </SubInfo>
         </Title>
       </InfoBox>
-    </Box>
+    </Card>
   )
 }
 
-export default Card
+export default CardComponent

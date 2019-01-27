@@ -1,18 +1,11 @@
 import styled from 'styled-components'
 import NextLink from 'next/link'
-import omit from 'lodash/omit'
 
 const StyledLink = styled.div`
   cursor: pointer;
   :hover {
     color: #976565;
   }
-`
-
-export const Page = styled.div`
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
 `
 
 export const Link = (props) => {
@@ -24,6 +17,5 @@ export const Link = (props) => {
 }
 
 export default {
-  Page,
   Link,
 }

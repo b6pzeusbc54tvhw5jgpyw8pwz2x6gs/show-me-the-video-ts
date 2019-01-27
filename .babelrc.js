@@ -1,7 +1,10 @@
-{
+module.exports = {
   "env": {
     "development": {
-      "presets": ["next/babel", "@zeit/next-typescript/babel"]
+      "presets": ["next/babel", "@zeit/next-typescript/babel"],
+      "plugins": [
+        ["babel-plugin-styled-components", { "minify": false }],
+      ]
     },
     "production": {
       "presets": ["next/babel", "@zeit/next-typescript/babel"]

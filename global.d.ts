@@ -19,9 +19,12 @@ interface ICommonStyledProps {
 interface IGuideInfo {
   id: string
   videoUrl: string
-  text: string
   thumbnailUrl: string
   filename: string
+  date: string
+  author: string
+  title: string
+  duration: string
 }
 
 declare module 'react-markdown' {
