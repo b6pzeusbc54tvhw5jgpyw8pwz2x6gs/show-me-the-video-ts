@@ -916,6 +916,13 @@
     "@types/react" "*"
     "@types/webpack" "*"
 
+"@types/react-timeago@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@types/react-timeago/-/react-timeago-4.1.0.tgz#e8ebc0add9de6d768fda610922879382bdc2f327"
+  integrity sha512-rQihM3unIJ2i3gxJhoM9hktqrMsrqv2OVyz4zWG7T6hUdmt4V5IGs6B65EJgo+4Rt9Z5pscc0H9YcZX4hPuLkA==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react@*", "@types/react@^16.7.18":
   version "16.7.18"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.7.18.tgz#f4ce0d539a893dd61e36cd11ae3a5e54f5a48337"
@@ -4251,10 +4258,15 @@ mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0:
   dependencies:
     minimist "0.0.8"
 
-moment@^2.22.1, moment@^2.23.0:
+moment@^2.22.1:
   version "2.23.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.23.0.tgz#759ea491ac97d54bac5ad776996e2a58cc1bc225"
   integrity sha512-3IE39bHVqFbWWaPOMHZF98Q9c3LDKGTmypMiTM2QygGXXElkFWIH7GxfmlwmY2vwa+wmNsoYZmG2iusf1ZjJoA==
+
+moment@^2.24.0:
+  version "2.24.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
 
 move-concurrently@^1.0.1:
   version "1.0.1"
@@ -5205,6 +5217,11 @@ react-ripples@^1.1.2:
   dependencies:
     prop-types "^15.6.0"
     react "^16.2.0"
+
+react-timeago@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/react-timeago/-/react-timeago-4.3.0.tgz#ff47bb12c3c2a40bc31e6b3e457f5ac4a690a3ec"
+  integrity sha512-q89RXb4K16xyDdy2GR/mIRYrDw8ll/RlohSIgjCr1J85eHKeL/XEl4XPKICMdJnJpaXwRzOjlsdnEuxWsi61RQ==
 
 react-transition-group@^2.2.1:
   version "2.5.2"
