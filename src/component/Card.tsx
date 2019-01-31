@@ -1,10 +1,10 @@
 import * as React from 'react'
 import Link from 'next/link'
-import * as moment from 'moment'
 
 import styled from '../style/styled-component'
 import { ICommonStyledProps, IGuideInfo } from 'global';
 import { layout as lo } from '../style/polished'
+import {  } from 'react-timeago'
 
 const Card = styled.div`
   cursor: pointer;
@@ -111,8 +111,9 @@ const SubInfo = styled.div<ICommonStyledProps>`
 `
 
 const CardComponent: React.FunctionComponent<IGuideInfo> = props => {
-  const { title, thumbnailUrl, id, date, author, duration } = props
-  const dateStr = moment(date).format('MMMM D, YYYY')
+  const { title, thumbnailUrl, id, createTime, author, duration } = props
+  const ct = new Date(createTime)
+  console.log(ct)
   return (
     <Card>
       <Link href={{ pathname: `/guide/${id}` }}>
@@ -127,7 +128,7 @@ const CardComponent: React.FunctionComponent<IGuideInfo> = props => {
             <Title>
               <h5>{title}</h5>
               <SubInfo>
-                <span>{`${dateStr} / ${author}`}</span>
+                <span><TimeAgo date={ct}/></span>
               </SubInfo>
             </Title>
           </InfoBox>

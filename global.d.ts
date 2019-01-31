@@ -21,10 +21,11 @@ interface IGuideInfo {
   videoUrl: string
   thumbnailUrl: string
   filename: string
-  date: string
   author: string
   title: string
   duration: string
+  createTime: string
+  updateTime: string
 }
 
 declare module 'react-markdown' {

@@ -104,7 +104,14 @@ const parseVideoInfo = ({ filename, text }: IFilenameText ) => {
   const isDraft = (tokenArr.links.draft || { href: "false" }).href === 'true'
   if (isDraft) return null
 
+  let createTime = (tokenArr.links.createtime || emptyLink).href
+  createTime = createTime ? createTime.replace(/-/g,' ') : createTime
+
+  let updateTime = (tokenArr.links.updatetime || emptyLink).href
+  updateTime = updateTime ? updateTime.replace(/-/g,' ') : updateTime
+
   return {
+    // links 에 걸린 키는 다 소문자로 변환됨
     title,
     subTitle,
     videoUrl: (tokenArr.links.videourl || emptyLink).href,
@@ -113,7 +120,8 @@ const parseVideoInfo = ({ filename, text }: IFilenameText ) => {
     prevGuideId: (tokenArr.links.prev || emptyLink).href,
     nextGuideId: (tokenArr.links.next || emptyLink).href,
     author: (tokenArr.links.author || emptyLink).href,
-    date: (tokenArr.links.date || emptyLink).href,
+    createTime,
+    updateTime,
     duration: (tokenArr.links.duration || emptyLink).href,
     id: md5(filename).substr(0,8),
     filename: filename,
